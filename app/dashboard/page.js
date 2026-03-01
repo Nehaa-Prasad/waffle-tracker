@@ -4,9 +4,14 @@ import { useEffect, useState } from "react"
 
 function StatCard({ title, value }) {
   return (
-    <div className="bg-white p-8 rounded-2xl shadow-lg border hover:shadow-xl transition">
-      <h2 className="text-gray-600 mb-3">{title}</h2>
-      <p className="text-3xl font-bold text-amber-900">{value}</p>
+    <div className="bg-white p-6 rounded-2xl shadow-md border border-gray-200 text-center w-full">
+      <h2 className="text-gray-600 mb-2 text-sm">
+        {title}
+      </h2>
+
+      <p className="text-2xl font-bold text-[#6d2c00] break-words">
+        {value}
+      </p>
     </div>
   )
 }
@@ -38,16 +43,19 @@ export default function Dashboard() {
   )
 
   return (
-    <div className="p-10 bg-[#f5e6d3] min-h-screen">
-      <h1 className="text-4xl font-bold mb-10 text-amber-900">
+    <div className="px-5 py-8 bg-[#f5e6d3] min-h-screen">
+
+      <h1 className="text-3xl font-bold mb-8 text-amber-900">
         Dashboard
       </h1>
 
-      <div className="grid grid-cols-3 gap-8">
+      {/* THIS IS THE FIX */}
+      <div className="flex flex-col gap-6 md:grid md:grid-cols-3 md:gap-8">
         <StatCard title="Total Revenue" value={`₹${totalRevenue}`} />
         <StatCard title="Total Orders" value={totalOrders} />
         <StatCard title="Total Waffles Sold" value={totalWaffles} />
       </div>
+
     </div>
   )
 }
