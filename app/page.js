@@ -70,15 +70,16 @@ export default function Home() {
   }
 
   const renderMenuSection = (title, data) => (
-    <div className="space-y-8">
+    <div className="space-y-10">
       <div className="text-center">
-        <h2 className="text-2xl font-semibold tracking-[0.25em] text-[#4b2e2e]">
+        <h2 className="text-2xl md:text-3xl font-semibold tracking-[0.25em] text-[#4b2e2e]">
           {title}
         </h2>
         <div className="w-16 h-[2px] bg-[#8d6e63] mx-auto mt-3"></div>
       </div>
 
-      <div className="grid grid-cols-2 gap-8">
+      {/* MOBILE RESPONSIVE GRID */}
+      <div className="grid grid-cols-1 sm:grid-cols-2 gap-6">
         {data.map((item) => (
           <div
             key={item.name}
@@ -86,7 +87,7 @@ export default function Home() {
           >
             <div className="flex justify-between mb-6">
               <div>
-                <p className="font-medium text-[#3e2723]">
+                <p className="font-medium text-[#3e2723] text-base">
                   {item.name}
                 </p>
                 <p className="text-sm text-gray-500">
@@ -98,7 +99,7 @@ export default function Home() {
             <div className="flex items-center justify-between">
               <button
                 onClick={() => decrease(item)}
-                className="w-9 h-9 rounded-full border border-gray-300"
+                className="w-11 h-11 rounded-full border border-gray-300 text-lg"
               >
                 –
               </button>
@@ -109,7 +110,7 @@ export default function Home() {
 
               <button
                 onClick={() => increase(item)}
-                className="w-9 h-9 rounded-full bg-black text-white"
+                className="w-11 h-11 rounded-full bg-black text-white text-lg"
               >
                 +
               </button>
@@ -121,55 +122,58 @@ export default function Home() {
   )
 
   return (
-    <div className="max-w-6xl mx-auto px-8 py-16">
+    <div className="bg-[#f5e6d3] min-h-screen">
+      <div className="max-w-6xl mx-auto px-6 md:px-8 py-12">
 
-      <div className="grid grid-cols-3 gap-16">
+        {/* RESPONSIVE GRID */}
+        <div className="grid grid-cols-1 lg:grid-cols-3 gap-12">
 
-        {/* MENU */}
-        <div className="col-span-2 space-y-16">
+          {/* MENU */}
+          <div className="lg:col-span-2 space-y-16">
 
-          {renderMenuSection("THE CLASSICS", classics)}
+            {renderMenuSection("THE CLASSICS", classics)}
 
-          {renderMenuSection("THE CREAM COLLECTION", creams)}
+            {renderMenuSection("THE CREAM COLLECTION", creams)}
 
-        </div>
-
-        {/* CART */}
-        <div className="bg-white rounded-3xl p-8 shadow-lg h-fit">
-
-          <h2 className="text-lg font-semibold mb-6 text-[#3e2723]">
-            Cart
-          </h2>
-
-          <div className="space-y-3 text-sm">
-            {items.map((item) => (
-              <div key={item.name} className="flex justify-between">
-                <span>
-                  {item.name} × {item.quantity}
-                </span>
-                <span>
-                  ₹{item.price * item.quantity}
-                </span>
-              </div>
-            ))}
           </div>
 
-          <div className="border-t mt-6 pt-6 flex justify-between font-semibold">
-            <span>Total</span>
-            <span>₹{totalAmount}</span>
-          </div>
+          {/* CART */}
+          <div className="bg-white rounded-3xl p-8 shadow-lg h-fit lg:sticky lg:top-10">
 
-          <button
-            onClick={placeOrder}
-            className="mt-8 w-full bg-black text-white py-3 rounded-2xl hover:opacity-90 transition"
-          >
-            Place Order
-          </button>
+            <h2 className="text-lg font-semibold mb-6 text-[#3e2723]">
+              Cart
+            </h2>
+
+            <div className="space-y-3 text-sm">
+              {items.map((item) => (
+                <div key={item.name} className="flex justify-between">
+                  <span>
+                    {item.name} × {item.quantity}
+                  </span>
+                  <span>
+                    ₹{item.price * item.quantity}
+                  </span>
+                </div>
+              ))}
+            </div>
+
+            <div className="border-t mt-6 pt-6 flex justify-between font-semibold">
+              <span>Total</span>
+              <span>₹{totalAmount}</span>
+            </div>
+
+            <button
+              onClick={placeOrder}
+              className="mt-8 w-full bg-black text-white py-4 rounded-2xl hover:opacity-90 transition text-base"
+            >
+              Place Order
+            </button>
+
+          </div>
 
         </div>
 
       </div>
-
     </div>
   )
 }
