@@ -15,34 +15,40 @@ export default function Navbar() {
 
   return (
     <div className="w-full border-b border-gray-200 bg-white">
-      <div className="max-w-6xl mx-auto px-8 py-6 flex items-center justify-between">
+      <div className="max-w-6xl mx-auto px-6 py-6">
 
-        <div className="flex items-start gap-4">
-            <span className="text-5xl leading-none">🧇</span>
+        {/* TOP SECTION */}
+        <div className="flex flex-col md:flex-row md:items-center md:justify-between gap-4">
 
-            <div className="flex flex-col">
-                <h1 className="text-xl font-semibold tracking-tight text-[#3e2723]">
-                    Bangalore Cream Waffles
-                </h1>
+          {/* Logo + Name */}
+          <div className="flex items-start gap-3">
+            <span className="text-5xl">🧇</span>
 
-                <p className="text-[11px] tracking-[0.4em] uppercase text-[#8d6e63] mt-1">
-                    Crunchy, Creamy & Purely Namma Bengaluru
-                </p>
+            <div>
+              <h1 className="text-xl font-semibold tracking-tight leading-tight">
+                Bangalore Cream Waffles
+              </h1>
+
+              <p className="text-xs tracking-[0.25em] text-[#8d6e63] mt-1 max-w-[250px] md:max-w-none">
+                CRUNCHY, CREAMY & PURELY NAMMA BENGALURU
+              </p>
             </div>
-        </div>
+          </div>
 
-        <div className="flex items-center gap-12">
-          <Link href="/" className={linkStyle("/")}>
-            Menu
-          </Link>
-          <Link href="/orders" className={linkStyle("/orders")}>
-            Orders
-          </Link>
-          <Link href="/dashboard" className={linkStyle("/dashboard")}>
-            Dashboard
-          </Link>
-        </div>
+          {/* Links */}
+          <div className="flex gap-8 md:gap-12">
+            <Link href="/" className={linkStyle("/")}>
+              Menu
+            </Link>
+            <Link href="/orders" className={linkStyle("/orders")}>
+              Orders
+            </Link>
+            <Link href="/dashboard" className={linkStyle("/dashboard")}>
+              Dashboard
+            </Link>
+          </div>
 
+        </div>
       </div>
     </div>
   )
