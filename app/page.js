@@ -1,65 +1,159 @@
-import Image from "next/image";
+"use client"
+
+import { useState } from "react"
+
+const menu = [
+  { name: "Honey Butter Waffle", price: 69 },
+  { name: "Chocolate Waffle", price: 79 },
+  { name: "White Chocolate Waffle", price: 79 },
+  { name: "Dark Chocolate Waffle", price: 85 },
+  { name: "Nutella Waffle", price: 89 },
+  { name: "Triple Chocolate Waffle", price: 99 },
+  { name: "Strawberry Chocolate Waffle", price: 99 },
+  { name: "Cream Waffle", price: 79 },
+  { name: "Blueberry Cream Waffle", price: 89 },
+  { name: "Strawberry Cream Waffle", price: 89 },
+  { name: "Chocolate Cream Waffle", price: 99 },
+  { name: "Dark Chocolate Cream Waffle", price: 109 },
+  { name: "Cream Nutella Waffle", price: 109 },
+  { name: "Triple Chocolate Cream Waffle", price: 119 },
+]
 
 export default function Home() {
+  const [cart, setCart] = useState({})
+
+  const increase = (item) => {
+    setCart((prev) => ({
+      ...prev,
+      [item.name]: {
+        ...item,
+        quantity: (prev[item.name]?.quantity || 0) + 1,
+      },
+    }))
+  }
+
+  const decrease = (item) => {
+    if (!cart[item.name]) return
+
+    const newQty = cart[item.name].quantity - 1
+
+    if (newQty <= 0) {
+      const updated = { ...cart }
+      delete updated[item.name]
+      setCart(updated)
+    } else {
+      setCart((prev) => ({
+        ...prev,
+        [item.name]: { ...item, quantity: newQty },
+      }))
+    }
+  }
+
+  const items = Object.values(cart)
+
+  const totalAmount = items.reduce(
+    (sum, item) => sum + item.price * item.quantity,
+    0
+  )
+
+  const placeOrder = async () => {
+    if (!items.length) return
+    await fetch("/api/orders", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({ items, totalAmount }),
+    })
+    setCart({})
+  }
+
   return (
-    <div className="flex min-h-screen items-center justify-center bg-zinc-50 font-sans dark:bg-black">
-      <main className="flex min-h-screen w-full max-w-3xl flex-col items-center justify-between py-32 px-16 bg-white dark:bg-black sm:items-start">
-        <Image
-          className="dark:invert"
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className="flex flex-col items-center gap-6 text-center sm:items-start sm:text-left">
-          <h1 className="max-w-xs text-3xl font-semibold leading-10 tracking-tight text-black dark:text-zinc-50">
-            To get started, edit the page.js file.
-          </h1>
-          <p className="max-w-md text-lg leading-8 text-zinc-600 dark:text-zinc-400">
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              className="font-medium text-zinc-950 dark:text-zinc-50"
-            >
-              Learning
-            </a>{" "}
-            center.
-          </p>
+    <div className="max-w-6xl mx-auto px-8 py-16">
+
+      <div className="grid grid-cols-3 gap-16">
+
+        {/* MENU */}
+        <div className="col-span-2 space-y-10">
+
+          <h2 className="text-lg font-semibold tracking-wide">
+            Menu
+          </h2>
+
+          <div className="grid grid-cols-2 gap-8">
+            {menu.map((item) => (
+              <div
+                key={item.name}
+                className="bg-white rounded-2xl p-6 shadow-sm hover:shadow-md transition"
+              >
+                <div className="flex justify-between mb-6">
+                  <div>
+                    <p className="font-medium">{item.name}</p>
+                    <p className="text-sm text-gray-500">
+                      ₹{item.price}
+                    </p>
+                  </div>
+                </div>
+
+                <div className="flex items-center justify-between">
+                  <button
+                    onClick={() => decrease(item)}
+                    className="w-9 h-9 rounded-full border border-gray-300"
+                  >
+                    –
+                  </button>
+
+                  <span className="text-lg font-semibold">
+                    {cart[item.name]?.quantity || 0}
+                  </span>
+
+                  <button
+                    onClick={() => increase(item)}
+                    className="w-9 h-9 rounded-full bg-black text-white"
+                  >
+                    +
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+
         </div>
-        <div className="flex flex-col gap-4 text-base font-medium sm:flex-row">
-          <a
-            className="flex h-12 w-full items-center justify-center gap-2 rounded-full bg-foreground px-5 text-background transition-colors hover:bg-[#383838] dark:hover:bg-[#ccc] md:w-[158px]"
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
+
+        {/* CART */}
+        <div className="bg-white rounded-3xl p-8 shadow-lg h-fit">
+
+          <h2 className="text-lg font-semibold mb-6">
+            Cart
+          </h2>
+
+          <div className="space-y-3 text-sm">
+            {items.map((item) => (
+              <div key={item.name} className="flex justify-between">
+                <span>
+                  {item.name} × {item.quantity}
+                </span>
+                <span>
+                  ₹{item.price * item.quantity}
+                </span>
+              </div>
+            ))}
+          </div>
+
+          <div className="border-t mt-6 pt-6 flex justify-between font-semibold">
+            <span>Total</span>
+            <span>₹{totalAmount}</span>
+          </div>
+
+          <button
+            onClick={placeOrder}
+            className="mt-8 w-full bg-black text-white py-3 rounded-2xl hover:opacity-90 transition"
           >
-            <Image
-              className="dark:invert"
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={16}
-            />
-            Deploy Now
-          </a>
-          <a
-            className="flex h-12 w-full items-center justify-center rounded-full border border-solid border-black/[.08] px-5 transition-colors hover:border-transparent hover:bg-black/[.04] dark:border-white/[.145] dark:hover:bg-[#1a1a1a] md:w-[158px]"
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
+            Place Order
+          </button>
+
         </div>
-      </main>
+
+      </div>
+
     </div>
-  );
+  )
 }
